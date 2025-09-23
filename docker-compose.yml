@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: job-board-postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: rootpassword
+      POSTGRES_DB: job-board-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - job_board_postgres_data:/var/lib/postgresql/data
+    networks:
+      - job_board_network
+
+volumes:
+  job_board_postgres_data:
+
+networks:
+  job_board_network:
