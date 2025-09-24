@@ -3,7 +3,7 @@ from api.models import Application
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    applicant = serializers.ReadOnlyField()
+    applicant = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Application

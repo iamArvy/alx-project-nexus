@@ -33,6 +33,9 @@ class ApplicationViewSet(
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    def perform_create(self, serializer):
+        serializer.save(applicant=self.request.user)
+
     @action(
         detail=True,
         methods=["patch"],
