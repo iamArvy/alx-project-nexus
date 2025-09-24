@@ -25,3 +25,9 @@ class ApplicationSerializer(serializers.ModelSerializer):
         if Application.objects.filter(job=job, applicant=applicant).exists():
             raise serializers.ValidationError("You have already applied for this job.")
         return data
+
+
+class ApplicationStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = ["status"]  # only expose status for PATCH

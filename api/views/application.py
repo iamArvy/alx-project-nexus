@@ -1,7 +1,7 @@
 from rest_framework import viewsets, mixins, filters
 from rest_framework.response import Response
 from api.models import Application
-from api.serializers import ApplicationSerializer
+from api.serializers import ApplicationSerializer, ApplicationStatusSerializer
 from api.filters import ApplicationFilter
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
@@ -20,7 +20,19 @@ class ApplicationViewSet(
     """
 
     queryset = Application.objects.all()
-    serializer_class = ApplicationSerializer
+
+    def get_serializer_class(self):
+        if self.action == "change_status":
+            return ApplicationStatusSerializer
+        return super().get_serializer_class()
+
+    # def get_serializer_class(self):
+    #     if getattr(self, "swagger_fake_view", False):
+    #         return super().get_serializer_class
+
+    #     if self.action == "change_status":
+    #         return ApplicationStatusSerializer
+    #     return super().get_serializer_class()
 
     def get_permissions(self):
         if self.action == "create":
