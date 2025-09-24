@@ -28,6 +28,14 @@ class Application(models.Model):
     class Meta:
         unique_together = ("job", "applicant")
         ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["applicant"]),
+            models.Index(fields=["job"]),
+            models.Index(fields=["job", "status"]),
+            models.Index(fields=["job", "created_at"]),
+            models.Index(fields=["applicant", "status"]),
+            models.Index(fields=["applicant", "created_at"]),
+        ]
 
     def __str__(self):
         return (

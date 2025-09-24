@@ -12,5 +12,5 @@ class JobViewSet(viewsets.ModelViewSet):
     serializer_class = JobSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = JobFilter
-    search_fields = ["title", "description", "requirements"]
+    search_fields = ["title", "description"]
     permission_classes = [IsAuthenticated, IsAdminOrReadOnly]

@@ -27,7 +27,7 @@ class Job(models.Model):
     location = models.CharField(max_length=255)
     type = models.CharField(max_length=12, choices=JOB_TYPE_CHOICES)
     industry = models.ForeignKey(
-        Industry, on_delete=models.CASCADE, related_name="applications"
+        Industry, on_delete=models.CASCADE, related_name="jobs"
     )
     salary_min = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
@@ -39,4 +39,13 @@ class Job(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.title} - {self.company}"
+        return f"{self.title} - {self.industry.name}"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["industry"]),
+            models.Index(fields=["location_type"]),
+            models.Index(fields=["type"]),
+            models.Index(fields=["salary_min", "salary_max"]),
+            models.Index(fields=["created_at"]),
+        ]
