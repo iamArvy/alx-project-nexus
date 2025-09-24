@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from api.models import Job
+from api.models import Industry
 
 
 class IndustrySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Job
+        model = Industry
         fields = "__all__"
         read_only_fields = ("id",)
