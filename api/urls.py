@@ -3,6 +3,8 @@ from django.urls import path, include
 from rest_framework_nested.routers import NestedDefaultRouter
 from .views import (
     RegisterView,
+    LoginView,
+    RefreshTokenView,
     JobViewSet,
     IndustryViewSet,
     UserApplicationViewSet,
@@ -14,6 +16,8 @@ from rest_framework.routers import DefaultRouter
 # Auth URLs
 authUrlPatterns = [
     path("signup/", RegisterView.as_view(), name="signup"),
+    path("login/", LoginView.as_view(), name="login"),
+    path("refresh/", RefreshTokenView.as_view(), name="token_refresh"),
 ]
 
 router = DefaultRouter()

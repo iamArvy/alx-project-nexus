@@ -5,6 +5,8 @@ from api.serializers import ApplicationSerializer
 from api.filters import ApplicationFilter
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
+from api.permissions import IsAdmin, IsUser, IsAdminOrIsApplicationOwner
+from rest_framework.permissions import IsAuthenticated
 
 
 class ApplicationViewSet(
@@ -20,13 +22,22 @@ class ApplicationViewSet(
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
 
-    def get_queryset(self):
-        return Application.objects()
+    def get_permissions(self):
+        if self.action == "create":
+            permission_classes = [IsUser]
+        elif self.action == "retrieve":
+            permission_classes = [IsAdminOrIsApplicationOwner]
+        elif self.action == "change_status":
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
     @action(
         detail=True,
         methods=["patch"],
         url_path="change_status",
+        permission_classes=[IsAdmin],
     )
     def change_status(self, request, pk=None):
         application = self.get_object()
@@ -44,6 +55,7 @@ class JobApplicationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     at /jobs/{job_id}/applications/
     """
 
+    permission_classes = [IsAdmin]
     serializer_class = ApplicationSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ApplicationFilter
@@ -63,6 +75,7 @@ class UserApplicationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     at /applicant/applications/
     """
 
+    permission_classes = [IsUser]
     serializer_class = ApplicationSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ApplicationFilter

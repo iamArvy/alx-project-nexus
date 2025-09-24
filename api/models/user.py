@@ -35,11 +35,11 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
-    def is_applicant(self):
-        return self.role == "applicant"
+    def is_user(self):
+        return self.role == "user"
 
-    def is_recruiter(self):
-        return self.role == "recruiter"
+    def is_admin(self):
+        return self.role == "admin"
 
     def __str__(self):
         return self.email
