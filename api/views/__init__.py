@@ -3,8 +3,8 @@ from .industry import IndustryViewSet
 from .job import JobViewSet
 from .application import (
     ApplicationViewSet,
-    UserApplicationViewSet,
-    JobApplicationViewSet,
+    UserApplicationListView,
+    JobApplicationListView,
 )
 
 __all__ = [
@@ -14,6 +14,6 @@ __all__ = [
     "IndustryViewSet",
     "JobViewSet",
     "ApplicationViewSet",
-    "UserApplicationViewSet",
-    "JobApplicationViewSet",
+    "UserApplicationListView",
+    "JobApplicationListView",
 ]

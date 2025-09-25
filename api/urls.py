@@ -1,14 +1,13 @@
 # api/urls.py
 from django.urls import path, include
-from rest_framework_nested.routers import NestedDefaultRouter
 from .views import (
     RegisterView,
     LoginView,
     RefreshTokenView,
     JobViewSet,
     IndustryViewSet,
-    UserApplicationViewSet,
-    JobApplicationViewSet,
+    UserApplicationListView,
+    JobApplicationListView,
     ApplicationViewSet,
 )
 from rest_framework.routers import DefaultRouter
@@ -27,16 +26,7 @@ authUrlPatterns = [
 router = DefaultRouter()
 router.register("jobs", JobViewSet, basename="job")
 router.register("industries", IndustryViewSet, basename="industry")
-router.register(
-    "user/applications",
-    UserApplicationViewSet,
-    basename="user-application",
-)
 router.register("applications", ApplicationViewSet, basename="application")
-jobs_router = NestedDefaultRouter(router, r"jobs", lookup="job")
-jobs_router.register(
-    r"applications", JobApplicationViewSet, basename="job-applications"
-)
 
 
 schema_view = get_schema_view(
@@ -106,5 +96,15 @@ urlpatterns = [
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
-    path("", include(router.urls + jobs_router.urls)),
+    path("", include(router.urls)),
+    path(
+        "user/applications/",
+        UserApplicationListView.as_view(),
+        name="user-applications",
+    ),
+    path(
+        "jobs/<uuid:id>/applications/",
+        JobApplicationListView.as_view(),
+        name="job-applications",
+    ),
 ]
