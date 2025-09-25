@@ -8,6 +8,8 @@ from api.permissions import IsAdminOrReadOnly
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from rest_framework_extensions.cache.decorators import cache_response
 from api.cache_keys import JobsListKeyConstructor, JobsDetailKeyConstructor
+from drf_yasg.utils import swagger_auto_schema
+from api.swagger_params import job_filter_params
 
 
 class JobViewSet(CacheResponseMixin, viewsets.ModelViewSet):
@@ -24,6 +26,7 @@ class JobViewSet(CacheResponseMixin, viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
+    @swagger_auto_schema(manual_parameters=job_filter_params)
     @cache_response(key_func=JobsListKeyConstructor(), timeout=60 * 10)
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)

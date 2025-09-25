@@ -15,6 +15,8 @@ from api.cache_keys import (
     UserApplicationsListKeyConstructor,
 )
 from rest_framework_extensions.cache.decorators import cache_response
+from drf_yasg.utils import swagger_auto_schema
+from api.swagger_params import application_filter_params
 
 
 class ApplicationViewSet(
@@ -92,6 +94,10 @@ class JobApplicationListView(CacheResponseMixin, ListAPIView):
         job_id = self.kwargs.get("id")
         return Application.objects.filter(job_id=job_id)
 
+    @swagger_auto_schema(manual_parameters=application_filter_params)
+    def get(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class UserApplicationListView(CacheResponseMixin, ListAPIView):
     """
@@ -108,3 +114,7 @@ class UserApplicationListView(CacheResponseMixin, ListAPIView):
 
     def get_queryset(self):
         return Application.objects.filter(applicant=self.request.user)
+
+    @swagger_auto_schema(manual_parameters=application_filter_params)
+    def get(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
