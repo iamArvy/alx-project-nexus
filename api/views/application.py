@@ -77,7 +77,7 @@ class ApplicationViewSet(
 class JobApplicationListView(CacheResponseMixin, ListAPIView):
     """
     Recruiter can only list applications for their own jobs
-    at /jobs/{job_id}/applications/
+    at /jobs/{id}/applications/
     """
 
     permission_classes = [IsAdmin]
