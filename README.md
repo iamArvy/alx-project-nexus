@@ -35,7 +35,6 @@ The **Job Board Backend** facilitates job postings, role-based access control, a
 * **Django:** High-level Python web framework used for building the RESTful API with built-in tools for authentication, routing, and security.
 * **Django REST Framework:** Extension of Django for building, testing, and documenting APIs (serialization, permissions, authentication, versioning).
 * **PostgreSQL:** Relational database system used to store structured data (users, jobs, applications, etc.).
-* **Redis:** In-memory datastore for caching and session management.
 * **Docker Compose:** Container orchestration for local development with PostgreSQL and Redis.
 * **Swagger:** API endpoint documentationAPI endpoint documentation
 

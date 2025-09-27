@@ -13,15 +13,6 @@ services:
       - job_board_postgres_data:/var/lib/postgresql/data
     networks:
       - job_board_network
-  
-  redis:
-    image: redis:latest
-    container_name: job_board-redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    networks:
-      - job_board_network
 
 volumes:
   job_board_postgres_data:

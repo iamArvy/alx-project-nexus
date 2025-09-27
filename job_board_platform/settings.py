@@ -33,7 +33,6 @@ env = environ.Env(
     STATIC_URL=(str, "/static/"),
     CORS_ALLOW_ALL_ORIGINS=(bool, False),
     CORS_ALLOWED_ORIGINS=(list, []),
-    CACHE_DATABASE_URL=(str, "redis://127.0.0.1:6379/1"),
 )
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # Quick-start development settings - unsuitable for production
@@ -58,7 +57,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "rest_framework_extensions",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "corsheaders",
@@ -188,18 +186,4 @@ SWAGGER_SETTINGS = {
             "description": "JWT token. Example: 'Bearer <your_token>'",
         }
     },
-}
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env("CACHE_DATABASE_URL"),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-    }
-}
-
-REST_FRAMEWORK_EXTENSIONS = {
-    "DEFAULT_USE_CACHE": "default",
 }

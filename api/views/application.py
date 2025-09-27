@@ -8,13 +8,6 @@ from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from api.permissions import IsAdmin, IsUser, IsAdminOrIsApplicationOwner
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_extensions.cache.mixins import CacheResponseMixin
-from api.cache_keys import (
-    ApplicationsListKeyConstructor,
-    ApplicationsDetailKeyConstructor,
-    UserApplicationsListKeyConstructor,
-)
-from rest_framework_extensions.cache.decorators import cache_response
 from drf_yasg.utils import swagger_auto_schema
 from api.swagger_params import application_filter_params
 
@@ -51,10 +44,6 @@ class ApplicationViewSet(
     def perform_create(self, serializer):
         serializer.save(applicant=self.request.user)
 
-    @cache_response(key_func=ApplicationsDetailKeyConstructor(), timeout=60 * 5)
-    def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
-
     @action(
         detail=True,
         methods=["patch"],
@@ -74,7 +63,7 @@ class ApplicationViewSet(
         return Response({"status": "updated", "new_status": application.status})
 
 
-class JobApplicationListView(CacheResponseMixin, ListAPIView):
+class JobApplicationListView(ListAPIView):
     """
     Recruiter can only list applications for their own jobs
     at /jobs/{id}/applications/
@@ -88,7 +77,6 @@ class JobApplicationListView(CacheResponseMixin, ListAPIView):
         "applicant__first_name",
         "applicant__last_name",
     ]
-    cache_response_key_func = ApplicationsListKeyConstructor()
 
     def get_queryset(self):
         job_id = self.kwargs.get("id")
@@ -99,7 +87,7 @@ class JobApplicationListView(CacheResponseMixin, ListAPIView):
         return super().list(request, *args, **kwargs)
 
 
-class UserApplicationListView(CacheResponseMixin, ListAPIView):
+class UserApplicationListView(ListAPIView):
     """
     Applicant can only list their own applications
     at /user/applications/
@@ -110,7 +98,6 @@ class UserApplicationListView(CacheResponseMixin, ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ApplicationFilter
     search_fields = ["job__title"]
-    cache_response_key_func = UserApplicationsListKeyConstructor()
 
     def get_queryset(self):
         return Application.objects.filter(applicant=self.request.user)
