@@ -1,5 +1,6 @@
 from drf_yasg import openapi
 
+# Filter Parameters for Jobs
 job_filter_params = [
     openapi.Parameter(
         "location",
@@ -40,6 +41,7 @@ job_filter_params = [
 ]
 
 
+# Filter Parameters for Applications
 application_filter_params = [
     openapi.Parameter(
         "status",
